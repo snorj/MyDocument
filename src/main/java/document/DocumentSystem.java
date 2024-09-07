@@ -3,26 +3,38 @@ package document;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class DocumentSystem {
 
     // DO NOT MODIFY
     private static final String FOLDER_NAME = "output";
+    private static Deque<DocumentMemento> undoStack = new ArrayDeque<>();
+    private static Deque<DocumentMemento> redoStack = new ArrayDeque<>();
 
     public static Document createDocument() {
         return new Document(12, "Pete");
     }
 
     public static void append(Document document, String text) {
+        undoStack.push(document.createMemento());
         document.append(text);
+        redoStack.clear();
     }
 
     public static void undo(Document document) {
-        document.undo();
+        if (!undoStack.isEmpty()) {
+            redoStack.push(document.createMemento());
+            document.changeState(undoStack.pop());
+        }
     }
 
     public static void redo(Document document) {
-        document.redo();
+        if (!redoStack.isEmpty()) {
+            undoStack.push(document.createMemento());
+            document.changeState(redoStack.pop());
+        }
     }
 
     public static void main(String[] args) {
