@@ -7,59 +7,60 @@ public class DocumentSystemTest {
     }
 
     public static void testDocumentSystem() {
-        Document doc = DocumentSystem.createDocument();
+        DocumentSystem documentSystem = new DocumentSystem();
+        Document doc = documentSystem.createDocument();
 
         System.out.println("1. Initial document:");
         printDocumentState(doc);
         System.out.println("Expected: \"\" (empty string)\n");
 
         // Append some text
-        DocumentSystem.append(doc, "First line");
+        documentSystem.append(doc, "First line");
         System.out.println("2. After appending 'First line':");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\n\"\n");
 
-        DocumentSystem.append(doc, "Second line");
+        documentSystem.append(doc, "Second line");
         System.out.println("3. After appending 'Second line':");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\nSecond line\\n\"\n");
 
-        DocumentSystem.append(doc, "Third line");
+        documentSystem.append(doc, "Third line");
         System.out.println("4. After appending 'Third line':");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\nSecond line\\nThird line\\n\"\n");
 
         // Undo operations
-        DocumentSystem.undo(doc);
+        documentSystem.undo(doc);
         System.out.println("5. After first undo:");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\nSecond line\\n\"\n");
 
-        DocumentSystem.undo(doc);
+        documentSystem.undo(doc);
         System.out.println("6. After second undo:");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\n\"\n");
 
         // Redo operations
-        DocumentSystem.redo(doc);
+        documentSystem.redo(doc);
         System.out.println("7. After first redo:");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\nSecond line\\n\"\n");
 
         // Append after undo
-        DocumentSystem.append(doc, "New third line");
+        documentSystem.append(doc, "New third line");
         System.out.println("8. After appending 'New third line':");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\nSecond line\\nNew third line\\n\"\n");
 
         // Try to redo (should not change the document)
-        DocumentSystem.redo(doc);
+        documentSystem.redo(doc);
         System.out.println("9. After attempting redo (should be unchanged):");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\nSecond line\\nNew third line\\n\"\n");
 
         // Final undo
-        DocumentSystem.undo(doc);
+        documentSystem.undo(doc);
         System.out.println("10. After final undo:");
         printDocumentState(doc);
         System.out.println("Expected: \"First line\\nSecond line\\n\"\n");
